@@ -1,7 +1,7 @@
 import type { RecommendationCandidate } from '@/engine/utils/dedupe';
 import type { NormalizedAuditInput, NormalizedToolUsage } from '@/engine/validators';
 import { THRESHOLDS } from '@/lib/pricing';
-import { annualizeMonthlyAmount, clampMoney, roundMoney } from '@/engine/utils/money';
+import { annualizeMonthlyAmount, clampMoney } from '@/engine/utils/money';
 import { getEffectiveMonthlySpend, getPricingTier, getLowerCostTier, getTieredCostForSeats } from '@/engine/pricingCalculators';
 
 const CONTRACTOR_BUFFER_SEATS = 1;

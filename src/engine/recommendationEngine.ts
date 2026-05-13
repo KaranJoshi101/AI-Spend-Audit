@@ -24,5 +24,5 @@ function buildCandidates(input: NormalizedAuditInput): RecommendationCandidate[]
 
 export function generateRecommendationsForAudit(input: NormalizedAuditInput): Recommendation[] {
   const selected = selectNonOverlappingRecommendations(buildCandidates(input));
-  return selected.map(({ resourceKeys, conflictGroup, priority, ...recommendation }) => recommendation);
+  return selected.map(({ resourceKeys: _uResourceKeys, conflictGroup: _uConflictGroup, priority: _uPriority, ...recommendation }) => recommendation);
 }
