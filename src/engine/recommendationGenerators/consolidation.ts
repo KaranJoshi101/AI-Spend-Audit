@@ -1,5 +1,5 @@
 import type { RecommendationCandidate } from '@/engine/utils/dedupe';
-import type { NormalizedAuditInput } from '@/engine/validators';
+import type { NormalizedAuditInput, NormalizedToolUsage } from '@/engine/validators';
 import { annualizeMonthlyAmount, clampMoney } from '@/engine/utils/money';
 import { getEffectiveMonthlySpend } from '@/engine/pricingCalculators';
 
@@ -12,8 +12,8 @@ function buildCandidate(base: Omit<RecommendationCandidate, 'resourceKeys' | 'co
   return base;
 }
 
-function makeCurrentSetup(items: Array<{ tool: string; spend: number }>): string {
-  return items.map((item) => `${item.tool} @ $${item.spend.toFixed(2)}/month`).join(' + ');
+function makeCurrentSetup(items: Array<{ tool: NormalizedToolUsage; spend: number }>): string {
+  return items.map((item) => `${item.tool.tool} @ $${item.spend.toFixed(2)}/month`).join(' + ');
 }
 
 function getGroupTools(input: NormalizedAuditInput, groupTools: string[]) {
