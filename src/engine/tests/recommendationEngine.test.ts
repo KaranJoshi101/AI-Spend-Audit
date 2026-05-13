@@ -8,13 +8,13 @@ const makeTool = (overrides: Partial<ToolUsageInput>): ToolUsageInput => ({
   plan: 'pro',
   seats: 1,
   monthlySpend: 10,
+  useCase: 'coding',
   ...overrides,
 });
 
 const makeInput = (tools: ToolUsageInput[], overrides: Partial<AuditInput> = {}): AuditInput => ({
   tools,
   teamSize: 3,
-  useCase: 'mixed',
   totalMonthlySpend: tools.reduce((sum, tool) => sum + tool.monthlySpend + (tool.apiCreditsSpend ?? 0), 0),
   ...overrides,
 });

@@ -60,7 +60,7 @@ export function generateApiVsSubscriptionRecommendations(input: NormalizedAuditI
     return [];
   }
 
-  const confidence = input.useCase === 'coding' || input.useCase === 'mixed' ? 'MEDIUM' : 'LOW';
+  const confidence = tool.useCase === 'coding' || tool.useCase === 'mixed' ? 'MEDIUM' : 'LOW';
 
   return [buildCandidate({
     id: `${tool.entryId}-subscription-to-api`,

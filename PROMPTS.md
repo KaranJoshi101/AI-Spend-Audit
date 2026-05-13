@@ -53,17 +53,18 @@ This file documents the exact AI prompts used throughout the product. This is th
         "tool": "github-copilot",
         "plan": "enterprise",
         "seats": 100,
-        "monthlySpend": 500.0
+        "monthlySpend": 500.0,
+        "useCase": "coding"
       },
       {
         "tool": "claude",
         "plan": "pro",
         "seats": 1,
-        "monthlySpend": 20.0
+        "monthlySpend": 20.0,
+        "useCase": "research"
       }
     ],
     "teamSize": 5,
-    "useCase": "coding",
     "totalMonthlySpend": 520.0
   },
   "isHighSavings": false,
@@ -78,7 +79,7 @@ You are an AI advisor summarizing a financial audit of AI tool spending for a st
 
 **Current Situation:**
 - Team size: {teamSize} people
-- Primary use case: {useCase}
+- Workflow coverage: {workflowSummary}
 - Current monthly AI spend: ${totalMonthlySpend}/month (${totalAnnualSpend}/year)
 - Tools: {tools}
 
@@ -124,7 +125,7 @@ If `VITE_ANTHROPIC_API_KEY` is not configured, use this template:
 ```
 Summary for your AI spend audit:
 
-You're currently spending $[totalMonthlySpend]/month ($[totalAnnualSpend]/year) on AI tools across [tools.length] products. Your [teamSize]-person team using [useCase] workloads was analyzed against [recommendationCount] optimization criteria.
+You're currently spending $[totalMonthlySpend]/month ($[totalAnnualSpend]/year) on AI tools across [tools.length] products. Your [teamSize]-person team using [workflowSummary] workloads was analyzed against [recommendationCount] optimization criteria.
 
 We identified an estimated $[estimatedMonthlySavings]/month in savings ([savingsPercentage]% of current spend), or $[estimatedAnnualSavings]/year. Your top opportunities are:
 [Top 3 recommendations with monthly savings, 1-line each]

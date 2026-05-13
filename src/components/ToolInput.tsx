@@ -12,7 +12,7 @@
 import React, { useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { PRICING_DATA } from '@/lib/pricing';
-import type { AITool, ToolUsageInput, PricingPlan } from '@/types';
+import type { AITool, ToolUsageInput, PricingPlan, UseCase } from '@/types';
 
 interface ToolInputProps {
   tool: ToolUsageInput;
@@ -30,6 +30,14 @@ const TOOL_LABELS: Record<AITool, string> = {
   gemini: 'Gemini',
   windsurf: 'Windsurf',
 };
+
+const USE_CASES: Array<{ value: UseCase; label: string }> = [
+  { value: 'coding', label: 'Coding' },
+  { value: 'writing', label: 'Writing' },
+  { value: 'research', label: 'Research' },
+  { value: 'analytics', label: 'Analytics' },
+  { value: 'mixed', label: 'Mixed' },
+];
 
 export const ToolInput: React.FC<ToolInputProps> = ({ tool, onUpdate, onRemove }) => {
   const pricing = PRICING_DATA[tool.tool];
@@ -52,7 +60,7 @@ export const ToolInput: React.FC<ToolInputProps> = ({ tool, onUpdate, onRemove }
         </button>
       </div>
 
-      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
         <div>
           <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Plan</label>
           <select
@@ -63,6 +71,21 @@ export const ToolInput: React.FC<ToolInputProps> = ({ tool, onUpdate, onRemove }
             {availablePlans.map((plan) => (
               <option key={plan} value={plan}>
                 {plan.charAt(0).toUpperCase() + plan.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Workflow</label>
+          <select
+            value={tool.useCase ?? 'mixed'}
+            onChange={(e) => onUpdate({ useCase: e.target.value as UseCase })}
+            className="w-full rounded-xl border border-slate-300 px-3 py-2 text-sm text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+          >
+            {USE_CASES.map((useCaseOption) => (
+              <option key={useCaseOption.value} value={useCaseOption.value}>
+                {useCaseOption.label}
               </option>
             ))}
           </select>

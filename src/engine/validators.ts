@@ -19,6 +19,14 @@ export interface NormalizedAuditInput extends Omit<AuditInput, 'tools'> {
 
 const USE_CASES: UseCase[] = ['coding', 'writing', 'research', 'analytics', 'mixed'];
 
+function normalizeUseCase(value: unknown): UseCase | null {
+  if (typeof value !== 'string') {
+    return null;
+  }
+
+  return USE_CASES.includes(value as UseCase) ? (value as UseCase) : null;
+}
+
 function isPricingStructureValid(): boolean {
   return Object.values(PRICING_DATA).every((pricing) => {
     if (!pricing || typeof pricing.tool !== 'string' || !Array.isArray(pricing.tiers) || pricing.tiers.length === 0) {
@@ -36,7 +44,7 @@ function isPricingStructureValid(): boolean {
   });
 }
 
-function validateToolUsageValue(raw: unknown, index: number): EngineValidationResult<NormalizedToolUsage> {
+function validateToolUsageValue(raw: unknown, index: number, fallbackUseCase: UseCase = 'mixed'): EngineValidationResult<NormalizedToolUsage> {
   if (!raw || typeof raw !== 'object') {
     return { success: false, errors: { [`tools.${index}`]: 'Tool entry must be an object' } };
   }
@@ -50,6 +58,7 @@ function validateToolUsageValue(raw: unknown, index: number): EngineValidationRe
   const apiSpendNumber = apiCreditsSpendValue === undefined || apiCreditsSpendValue === null
     ? 0
     : normalizeFiniteNumber(apiCreditsSpendValue);
+  const useCaseValue = normalizeUseCase(source.useCase ?? fallbackUseCase);
 
   const errors: Record<string, string> = {};
 
@@ -74,6 +83,10 @@ function validateToolUsageValue(raw: unknown, index: number): EngineValidationRe
     errors[`tools.${index}.monthlySpend`] = 'Spend must be positive';
   }
 
+  if (!useCaseValue) {
+    errors[`tools.${index}.useCase`] = 'Invalid use case';
+  }
+
   if (apiCreditsSpendValue !== undefined && apiCreditsSpendValue !== null && (apiSpendNumber === null || apiSpendNumber < 0)) {
     errors[`tools.${index}.apiCreditsSpend`] = 'API spend must be at least 0';
   }
@@ -92,6 +105,7 @@ function validateToolUsageValue(raw: unknown, index: number): EngineValidationRe
     seats: seatsValue as number,
     monthlySpend: roundMoney(monthlySpendValue as number),
     apiCreditsSpend: apiSpendNumber ? roundMoney(apiSpendNumber) : undefined,
+    useCase: useCaseValue as UseCase,
   });
 
   return {
@@ -118,7 +132,7 @@ export function validateAuditInput(data: unknown): EngineValidationResult<Normal
   const raw = data as Record<string, unknown>;
   const toolsValue = raw.tools;
   const teamSizeValue = normalizeFiniteNumber(raw.teamSize);
-  const useCaseValue = raw.useCase;
+  const legacyUseCaseValue = normalizeUseCase(raw.useCase);
   const totalMonthlySpendValue = raw.totalMonthlySpend;
 
   const errors: Record<string, string> = {};
@@ -135,10 +149,6 @@ export function validateAuditInput(data: unknown): EngineValidationResult<Normal
     errors.teamSize = 'Team size must be at least 1';
   }
 
-  if (!USE_CASES.includes(useCaseValue as UseCase)) {
-    errors.useCase = 'Invalid use case';
-  }
-
   if (totalMonthlySpendValue !== undefined && totalMonthlySpendValue !== null) {
     const spendNumber = normalizeFiniteNumber(totalMonthlySpendValue);
     if (spendNumber === null || spendNumber < 0) {
@@ -147,9 +157,11 @@ export function validateAuditInput(data: unknown): EngineValidationResult<Normal
   }
 
   const normalizedTools: NormalizedToolUsage[] = [];
+  const fallbackUseCase = legacyUseCaseValue ?? 'mixed';
+
   if (Array.isArray(toolsValue)) {
     for (const [index, tool] of (toolsValue as unknown[]).entries()) {
-      const result = validateToolUsageValue(tool, index);
+      const result = validateToolUsageValue(tool, index, fallbackUseCase);
       if (!result.success || !result.data) {
         Object.assign(errors, result.errors ?? { [`tools.${index}`]: 'Invalid tool entry' });
         continue;
@@ -172,12 +184,11 @@ export function validateAuditInput(data: unknown): EngineValidationResult<Normal
     data: {
       tools: normalizedTools,
       teamSize: teamSizeValue as number,
-      useCase: useCaseValue as UseCase,
       totalMonthlySpend: computedMonthlySpend,
     },
   };
 }
 
 export function validateToolUsageInput(data: unknown): EngineValidationResult<NormalizedToolUsage> {
-  return validateToolUsageValue(data, 0);
+  return validateToolUsageValue(data, 0, 'mixed');
 }

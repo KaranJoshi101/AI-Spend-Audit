@@ -19,14 +19,14 @@ function buildCandidate(base: Omit<RecommendationCandidate, 'resourceKeys' | 'co
   return base;
 }
 
-function isUseCaseCompatible(tool: NormalizedToolUsage, input: NormalizedAuditInput): boolean {
+function isUseCaseCompatible(tool: NormalizedToolUsage): boolean {
   const fitSet = USE_CASE_FIT[tool.tool] ?? [];
-  return input.useCase === 'mixed' || fitSet.includes(input.useCase);
+  return tool.useCase === 'mixed' || fitSet.includes(tool.useCase);
 }
 
-export function generateAlternativeRecommendations(input: NormalizedAuditInput, tool: NormalizedToolUsage): RecommendationCandidate[] {
+export function generateAlternativeRecommendations(_input: NormalizedAuditInput, tool: NormalizedToolUsage): RecommendationCandidate[] {
   const alternatives = ALTERNATIVES[tool.tool];
-  if (!alternatives || alternatives.length === 0 || !isUseCaseCompatible(tool, input)) {
+  if (!alternatives || alternatives.length === 0 || !isUseCaseCompatible(tool)) {
     return [];
   }
 

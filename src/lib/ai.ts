@@ -1,4 +1,4 @@
-import type { AuditResult } from '@/types';
+import type { AuditResult, UseCase } from '@/types';
 
 const ANTHROPIC_KEY = (import.meta.env.VITE_ANTHROPIC_API_KEY as string) || '';
 
@@ -81,7 +81,17 @@ export async function generateAISummary(report: AuditResult): Promise<string> {
  * Build the AI summary prompt per PROMPTS.md specification
  * See PROMPTS.md for full prompt template and design rationale
  */
+const WORKFLOW_ORDER: UseCase[] = ['coding', 'writing', 'research', 'analytics', 'mixed'];
+
+function deriveWorkflowSummary(tools: Array<{ useCase?: UseCase }>): string {
+  const uniqueWorkflows = Array.from(new Set(tools.map((tool) => tool.useCase ?? 'mixed')));
+  return uniqueWorkflows
+    .sort((a, b) => WORKFLOW_ORDER.indexOf(a) - WORKFLOW_ORDER.indexOf(b))
+    .join(', ');
+}
+
 function buildAISummaryPrompt(report: AuditResult): string {
+  const workflowSummary = deriveWorkflowSummary(report.input.tools);
   const topRecs = report.recommendations.slice(0, 3);
   const recsList = topRecs
     .map((rec) => `- **${rec.title}**: $${rec.estimatedMonthlySavings}/mo ($${rec.estimatedAnnualSavings}/yr)`)
@@ -91,7 +101,7 @@ function buildAISummaryPrompt(report: AuditResult): string {
 
 **Current Situation:**
 - Team size: ${report.input.teamSize} people
-- Primary use case: ${report.input.useCase}
+- Workflow coverage: ${workflowSummary}
 - Current monthly AI spend: $${report.metrics.totalMonthlySpend}/month ($${report.metrics.totalAnnualSpend}/year)
 - Tools: ${report.input.tools.map((t) => t.tool).join(', ')}
 
@@ -119,12 +129,13 @@ Format: Plain text, no markdown.`;
  * This ensures the product works even without API integration
  */
 function generateTemplatedSummary(report: AuditResult): string {
+  const workflowSummary = deriveWorkflowSummary(report.input.tools);
   const topRecs = report.recommendations.slice(0, 3);
   const recsList = topRecs.map((r) => `- ${r.title}: $${r.estimatedMonthlySavings}/mo`).join('\n');
 
   return `Summary for your AI spend audit:
 
-Your ${report.input.teamSize}-person team is spending $${report.metrics.totalMonthlySpend}/month on AI tools, which works out to $${(report.metrics.totalMonthlySpend / report.input.teamSize).toFixed(0)} per person per month. This is reasonable for a ${report.input.useCase}-focused startup.
+Your ${report.input.teamSize}-person team is spending $${report.metrics.totalMonthlySpend}/month on AI tools, which works out to $${(report.metrics.totalMonthlySpend / report.input.teamSize).toFixed(0)} per person per month. This is reasonable for a ${workflowSummary}-focused stack.
 
 Our audit identified an estimated $${report.metrics.estimatedMonthlySavings}/month in potential savings (${report.metrics.savingsPercentage.toFixed(1)}% of your current spend), which amounts to $${report.metrics.estimatedAnnualSavings}/year. Here are your top opportunities:
 ${recsList}

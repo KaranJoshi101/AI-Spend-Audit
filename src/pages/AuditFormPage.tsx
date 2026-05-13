@@ -21,26 +21,27 @@ interface AuditFormPageProps {
   onSubmit: (data: AuditInput) => Promise<void>;
 }
 
-const USE_CASES: { value: UseCase; label: string; description: string }[] = [
-  { value: 'coding', label: 'Coding', description: 'Development & code generation' },
-  { value: 'writing', label: 'Writing', description: 'Content & documentation' },
-  { value: 'research', label: 'Research', description: 'Analysis & learning' },
-  { value: 'analytics', label: 'Analytics', description: 'Data & insights' },
-  { value: 'mixed', label: 'Mixed', description: 'Multiple use cases' },
-];
+const TOOL_DEFAULT_USE_CASE: Record<AITool, UseCase> = {
+  cursor: 'coding',
+  'github-copilot': 'coding',
+  claude: 'research',
+  chatgpt: 'mixed',
+  'openai-api': 'analytics',
+  'anthropic-api': 'writing',
+  gemini: 'analytics',
+  windsurf: 'coding',
+};
 
 export const AuditFormPage: React.FC<AuditFormPageProps> = ({ onSubmit }) => {
   const {
     tools,
     teamSize,
-    useCase,
     totalMonthlySpend,
     isSubmitting,
     addTool,
     removeTool,
     updateTool,
     setTeamSize,
-    setUseCase,
     setErrors,
     setIsSubmitting,
     getAuditInput,
@@ -66,6 +67,7 @@ export const AuditFormPage: React.FC<AuditFormPageProps> = ({ onSubmit }) => {
       plan: 'free',
       seats: 1,
       monthlySpend: 0,
+      useCase: TOOL_DEFAULT_USE_CASE[selectedToolToAdd] ?? 'mixed',
     };
     addTool(newTool);
   };
@@ -222,27 +224,6 @@ export const AuditFormPage: React.FC<AuditFormPageProps> = ({ onSubmit }) => {
               <p className="mt-2 text-sm text-slate-500">{teamSize} people in your team</p>
             </div>
 
-            <div>
-              <label className="mb-3 block text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Primary use case</label>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {USE_CASES.map((uc) => (
-                  <button
-                    key={uc.value}
-                    type="button"
-                    onClick={() => setUseCase(uc.value)}
-                    className={`min-h-12 rounded-xl border p-3 text-left transition-all ${
-                      useCase === uc.value
-                        ? 'border-slate-900 bg-slate-900 text-white'
-                        : 'border-slate-200 bg-white text-slate-900 hover:border-slate-300'
-                    }`}
-                    aria-pressed={useCase === uc.value}
-                  >
-                    <div className="font-medium text-sm">{uc.label}</div>
-                    <div className={`text-xs ${useCase === uc.value ? 'text-slate-300' : 'text-slate-600'}`}>{uc.description}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
           </section>
 
           <section className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 p-5 text-white shadow-lg sm:p-6">

@@ -50,12 +50,12 @@ export interface ToolUsageInput {
   seats: number;
   monthlySpend: number;
   apiCreditsSpend?: number;
+  useCase: UseCase;
 }
 
 export interface AuditInput {
   tools: ToolUsageInput[];
   teamSize: number;
-  useCase: UseCase;
   totalMonthlySpend: number;
 }
 
@@ -151,7 +151,7 @@ export interface PublicAuditReport {
   recommendations: Recommendation[];
   tool: AITool;
   teamSize: number;
-  useCase: UseCase;
+  useCase?: UseCase;
   createdAt: Date;
   summary?: string;
 }
@@ -185,7 +185,6 @@ export interface ApiResponse<T> {
 export interface CreateAuditRequest {
   tools: ToolUsageInput[];
   teamSize: number;
-  useCase: UseCase;
   totalMonthlySpend: number;
 }
 

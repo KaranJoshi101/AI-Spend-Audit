@@ -12,13 +12,13 @@ const createToolUsage = (overrides: Partial<ToolUsageInput>): ToolUsageInput => 
   plan: 'pro',
   seats: 1,
   monthlySpend: 10,
+  useCase: 'coding',
   ...overrides,
 });
 
 const createAuditInput = (tools: ToolUsageInput[] = [], overrides: Partial<AuditInput> = {}): AuditInput => ({
   tools: tools.length ? tools : [createToolUsage({})],
   teamSize: 5,
-  useCase: 'coding',
   totalMonthlySpend: tools.reduce((sum, tool) => sum + tool.monthlySpend + (tool.apiCreditsSpend ?? 0), 0),
   ...overrides,
 });
@@ -219,10 +219,10 @@ describe('Audit Engine - Metrics and Edge Cases', () => {
           plan: 'pro',
           seats: -1,
           monthlySpend: -10,
+          useCase: 'coding',
         },
       ],
       teamSize: 0,
-      useCase: 'coding',
       totalMonthlySpend: -10,
     } as AuditInput);
 
@@ -235,7 +235,6 @@ describe('Audit Engine - Metrics and Edge Cases', () => {
     const oversized = {
       tools: Array.from({ length: 21 }, () => createToolUsage({})),
       teamSize: 5,
-      useCase: 'coding',
       totalMonthlySpend: 210,
     };
 
@@ -249,7 +248,6 @@ describe('Audit Engine - Metrics and Edge Cases', () => {
     const result = validateAuditForm({
       tools: [createToolUsage({ monthlySpend: -1 })],
       teamSize: -1,
-      useCase: 'coding',
       totalMonthlySpend: -1,
     });
 

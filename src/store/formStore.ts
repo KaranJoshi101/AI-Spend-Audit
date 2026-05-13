@@ -11,14 +11,28 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { AuditInput, ToolUsageInput, UseCase } from '@/types';
+import type { AuditInput, ToolUsageInput, AITool, UseCase } from '@/types';
 import { getToolMonthlyCost } from '@/lib/pricing';
+
+const DEFAULT_TOOL_USE_CASE: Record<AITool, UseCase> = {
+  cursor: 'coding',
+  'github-copilot': 'coding',
+  claude: 'research',
+  chatgpt: 'mixed',
+  'openai-api': 'analytics',
+  'anthropic-api': 'writing',
+  gemini: 'analytics',
+  windsurf: 'coding',
+};
+
+function getDefaultUseCase(tool: AITool): UseCase {
+  return DEFAULT_TOOL_USE_CASE[tool] ?? 'mixed';
+}
 
 interface FormState {
   // Form data
   tools: ToolUsageInput[];
   teamSize: number;
-  useCase: UseCase;
 
   // Derived
   totalMonthlySpend: number;
@@ -32,7 +46,6 @@ interface FormState {
   removeTool: (toolId: string) => void;
   updateTool: (toolId: string, updates: Partial<ToolUsageInput>) => void;
   setTeamSize: (size: number) => void;
-  setUseCase: (useCase: UseCase) => void;
   setErrors: (errors: Record<string, string>) => void;
   setIsSubmitting: (isSubmitting: boolean) => void;
   reset: () => void;
@@ -49,10 +62,10 @@ const INITIAL_STATE: Partial<FormState> = {
       plan: 'pro',
       seats: 1,
       monthlySpend: 0,
+      useCase: getDefaultUseCase('github-copilot'),
     },
   ],
   teamSize: 5,
-  useCase: 'coding',
   totalMonthlySpend: 0,
   isSubmitting: false,
   errors: {},
@@ -64,7 +77,6 @@ export const useFormStore = create<FormState>()(
       // Initial state
       tools: INITIAL_STATE.tools as ToolUsageInput[],
       teamSize: INITIAL_STATE.teamSize as number,
-      useCase: INITIAL_STATE.useCase as UseCase,
       totalMonthlySpend: INITIAL_STATE.totalMonthlySpend as number,
       isSubmitting: INITIAL_STATE.isSubmitting as boolean,
       errors: INITIAL_STATE.errors as Record<string, string>,
@@ -109,10 +121,6 @@ export const useFormStore = create<FormState>()(
         set({ teamSize: Math.max(1, size) });
       },
 
-      setUseCase: (useCase) => {
-        set({ useCase });
-      },
-
       setErrors: (errors) => {
         set({ errors });
       },
@@ -131,7 +139,6 @@ export const useFormStore = create<FormState>()(
         return {
           tools: state.tools,
           teamSize: state.teamSize,
-          useCase: state.useCase,
           totalMonthlySpend: state.totalMonthlySpend,
         };
       },
