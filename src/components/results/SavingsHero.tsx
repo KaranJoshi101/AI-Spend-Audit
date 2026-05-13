@@ -45,29 +45,29 @@ export const SavingsHero: React.FC<SavingsHeroProps> = ({ result }) => {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35 }}
-      className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-6 text-white shadow-2xl md:p-8"
+      className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 p-5 text-white shadow-2xl sm:p-6 md:p-8"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(244,114,182,0.18),transparent_40%),radial-gradient(circle_at_90%_80%,rgba(56,189,248,0.16),transparent_45%)]" />
       <div className="relative">
         <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-300">Estimated annual savings</p>
-        <div className="mt-3 flex flex-wrap items-end gap-x-3 gap-y-1">
+        <div className="mt-3 flex flex-col items-start gap-1 sm:flex-row sm:items-end sm:gap-x-3 sm:gap-y-1">
           <AnimatedCounter
             value={Math.round(metrics.estimatedAnnualSavings)}
             duration={1.25}
             prefix="$"
             suffix="/year"
-            className="text-5xl font-semibold tracking-tight md:text-7xl"
+            className="text-4xl font-semibold leading-none tracking-tight sm:text-5xl md:text-7xl"
           />
-          <span className="pb-2 text-sm text-slate-300 md:text-base">
+          <span className="text-sm text-slate-300 sm:pb-2 md:text-base">
             from <AnimatedCounter value={Math.round(metrics.estimatedMonthlySavings)} duration={1.25} prefix="$" suffix="/month" />
           </span>
         </div>
 
-        <p className="mt-2 max-w-2xl text-sm text-slate-300">
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">
           Prioritize the highest-confidence actions first to realize savings before your next billing cycle.
         </p>
 
-        <p className="mt-3 text-sm text-slate-200">
+        <p className="mt-3 text-sm leading-6 text-slate-200">
           Current annual spend: <span className="font-semibold text-white">${currentAnnualSpend.toLocaleString()}/year</span>
         </p>
 

@@ -12,7 +12,8 @@
  * Next Review: June 1, 2026
  */
 
-import type { ToolPricing, PricingTier } from '@/types';
+import type { AITool, PricingTier, ToolPricing, PricingPlan } from '@/types';
+import { clampMoney, roundMoney } from '@/engine/utils/money';
 
 export const PRICING_DATA: Record<string, ToolPricing> = {
   // https://www.cursor.com/pricing
@@ -293,7 +294,7 @@ export const ALTERNATIVES: Record<string, Array<{ tool: string; reason: string; 
 };
 
 export function getPricing(tool: string): ToolPricing | undefined {
-  return PRICING_DATA[tool];
+  return PRICING_DATA[tool as AITool];
 }
 
 export function getTier(tool: string, plan: string): PricingTier | undefined {
@@ -302,6 +303,15 @@ export function getTier(tool: string, plan: string): PricingTier | undefined {
   return pricing.tiers.find((t) => t.plan === plan);
 }
 
+export function getValidPlansForTool(tool: AITool): PricingPlan[] {
+  return getPricing(tool)?.tiers.map((tier) => tier.plan) ?? [];
+}
+
 export function getToolMonthlyCost(tool: { monthlySpend: number; apiCreditsSpend?: number }): number {
-  return tool.monthlySpend + (tool.apiCreditsSpend ?? 0);
+  return clampMoney((tool.monthlySpend ?? 0) + (tool.apiCreditsSpend ?? 0));
+}
+
+export function getTierMonthlyCost(tier: PricingTier, seatCount: number): number {
+  const additionalSeats = Math.max(0, seatCount - tier.seatsIncluded);
+  return roundMoney(tier.monthlyPrice + additionalSeats * tier.costPerExtraUser);
 }

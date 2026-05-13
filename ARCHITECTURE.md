@@ -62,12 +62,14 @@ src/
 ### 4. Recommendation Types
 ```typescript
 type RecommendationType = 
-  | 'downgrade-plan'           // Enterprise -> Team/Pro
-  | 'api-vs-subscription'       // Fixed cost -> Usage-based
-  | 'consolidate-users'         // Reduce seats
-  | 'better-alternative'        // Switch tools
-  | 'unused-seats'              // Remove extras
-  | 'credit-optimization'       // Bulk credits strategy
+  | 'ENTERPRISE_DOWNGRADE'              // Enterprise -> lower tier
+  | 'UNUSED_SEATS'                      // Remove extras
+  | 'OVERPROVISIONED_SEATS'             // Large seat excess
+  | 'TEAM_PLAN_OPTIMIZATION'            // Re-evaluate lower tiers
+  | 'API_VS_SUBSCRIPTION'               // Fixed cost -> usage-based
+  | 'CHEAPER_ALTERNATIVE'               // Switch tools
+  | 'DUPLICATE_TOOL_OVERLAP'            // Remove redundant tools
+  | 'UNDERUTILIZED_ENTERPRISE_FEATURES' // Review enterprise usage
 ```
 
 ---
@@ -77,8 +79,9 @@ type RecommendationType =
 ### Enterprise Downgrade Logic
 ```
 IF plan == 'enterprise' AND teamSize < 50:
-  savings = currentSpend - teamTierPrice
-  IF savings > $100:
+  lowerTier = cheapest viable lower tier with seat overages
+  savings = currentSpend - lowerTierCost
+  IF savings >= $100:
     RECOMMEND downgrade
 ```
 
@@ -87,21 +90,23 @@ IF plan == 'enterprise' AND teamSize < 50:
 unusedSeats = MAX(0, numSeats - teamSize)
 IF unusedSeats > 0:
   savings = unusedSeats * costPerExtraUser
-  IF savings > $10:
-    RECOMMEND consolidation
+  IF savings >= $10:
+    RECOMMEND UNUSED_SEATS or OVERPROVISIONED_SEATS
 ```
 
 ### API vs Subscription
 ```
-IF plan != 'credits' AND monthlySpend > $50:
-  estimatedApiCost = monthlySpend * 0.6  (40% savings estimate)
-  IF (currentSpend - estimatedApiCost) > $20:
+IF plan == 'credits':
+  compare against cheapest viable subscription tier
+ELSE IF current plan has API spend:
+  compare subscription cost plus API usage against credits pricing
+  IF (currentSpend - alternativeCost) >= $20:
     RECOMMEND API migration
 ```
 
 ---
 
-## Test Coverage (16 Tests)
+## Test Coverage (15 Tests)
 
 ### Enterprise Downgrade (3 tests)
 - ✅ Recommend downgrade for small teams
@@ -123,6 +128,11 @@ IF plan != 'credits' AND monthlySpend > $50:
 - ✅ Sort by savings descending
 - ✅ Include reasoning in all recommendations
 
+### Engine Recommendation Selection (3 tests)
+- ✅ Normalize tool aliases before validation
+- ✅ Remove overlapping recommendations deterministically
+- ✅ Keep selected recommendations non-duplicative
+
 ### Edge Cases (3 tests)
 - ✅ Single user free plan
 - ✅ Multiple identical tools
@@ -137,7 +147,7 @@ IF plan != 'credits' AND monthlySpend > $50:
 
 | Metric | Value |
 |--------|-------|
-| Test Execution | 12ms (16 tests) |
+| Test Execution | 11ms (15 tests) |
 | Bundle Size | 193KB (gzip: 60KB) |
 | TypeScript Compilation | <1s |
 | Vite Build | 1.3s |

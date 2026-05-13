@@ -102,16 +102,16 @@ export const AuditFormPage: React.FC<AuditFormPageProps> = ({ onSubmit }) => {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 px-4 py-8 md:py-12">
+    <main className="min-h-screen overflow-x-hidden bg-gradient-to-b from-slate-100 via-white to-slate-100 px-4 py-8 md:py-12">
       <div className="mx-auto max-w-3xl">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 text-left shadow-sm md:mb-10 md:p-8"
+          className="mb-8 rounded-2xl border border-slate-200 bg-white p-5 text-left shadow-sm md:mb-10 md:p-8"
         >
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-500">TokenGuard</p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-slate-900 md:text-4xl">Run Your AI Spend Audit</h1>
-          <p className="mt-2 text-sm text-slate-600 md:text-base">
+          <h1 className="mt-2 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl md:text-4xl">Run Your AI Spend Audit</h1>
+          <p className="mt-2 text-sm leading-6 text-slate-600 md:text-base">
             Add your tools, current plans, and team details. We will generate a deterministic savings report with clear financial impact.
           </p>
         </motion.div>
@@ -163,11 +163,11 @@ export const AuditFormPage: React.FC<AuditFormPageProps> = ({ onSubmit }) => {
               ))}
             </div>
 
-            <div className="mt-4 flex gap-2">
+            <div className="mt-4 grid grid-cols-1 gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
               <select
                 value={selectedToolToAdd}
                 onChange={(e) => setSelectedToolToAdd(e.target.value as AITool)}
-                className="flex-1 rounded-xl border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
+                className="min-h-12 rounded-xl border border-slate-300 px-3 py-3 text-sm font-semibold text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200"
               >
                 {AVAILABLE_TOOLS.map((t) => (
                   <option key={t.id} value={t.id}>
@@ -178,7 +178,7 @@ export const AuditFormPage: React.FC<AuditFormPageProps> = ({ onSubmit }) => {
               <button
                 type="button"
                 onClick={handleAddTool}
-                className="flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-900 transition hover:bg-slate-50 hover:border-slate-500"
+                className="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-500 hover:bg-slate-50"
               >
                 <Plus size={18} />
                 Add
@@ -196,11 +196,11 @@ export const AuditFormPage: React.FC<AuditFormPageProps> = ({ onSubmit }) => {
 
             <div>
               <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.08em] text-slate-500">Team size</label>
-              <div className="flex items-center overflow-hidden rounded-xl border border-slate-300">
+              <div className="flex items-stretch overflow-hidden rounded-xl border border-slate-300">
                 <button
                   type="button"
                   onClick={() => setTeamSize(Math.max(1, teamSize - 1))}
-                  className="px-4 py-3 font-semibold text-slate-600 transition hover:bg-slate-100"
+                  className="min-h-12 px-4 py-3 font-semibold text-slate-600 transition hover:bg-slate-100"
                 >
                   −
                 </button>
@@ -208,13 +208,13 @@ export const AuditFormPage: React.FC<AuditFormPageProps> = ({ onSubmit }) => {
                   type="number"
                   value={teamSize}
                   onChange={(e) => setTeamSize(Math.max(1, parseInt(e.target.value) || 1))}
-                  className="min-w-0 flex-1 border-0 py-3 text-center text-lg font-semibold text-slate-900 outline-none focus:ring-2 focus:ring-slate-200"
+                  className="min-w-0 flex-1 border-0 py-3 text-center text-base font-semibold text-slate-900 outline-none focus:ring-2 focus:ring-slate-200 sm:text-lg"
                   min="1"
                 />
                 <button
                   type="button"
                   onClick={() => setTeamSize(teamSize + 1)}
-                  className="px-4 py-3 font-semibold text-slate-600 transition hover:bg-slate-100"
+                  className="min-h-12 px-4 py-3 font-semibold text-slate-600 transition hover:bg-slate-100"
                 >
                   +
                 </button>
@@ -230,7 +230,7 @@ export const AuditFormPage: React.FC<AuditFormPageProps> = ({ onSubmit }) => {
                     key={uc.value}
                     type="button"
                     onClick={() => setUseCase(uc.value)}
-                    className={`rounded-xl border p-3 text-left transition-all ${
+                    className={`min-h-12 rounded-xl border p-3 text-left transition-all ${
                       useCase === uc.value
                         ? 'border-slate-900 bg-slate-900 text-white'
                         : 'border-slate-200 bg-white text-slate-900 hover:border-slate-300'
@@ -245,11 +245,11 @@ export const AuditFormPage: React.FC<AuditFormPageProps> = ({ onSubmit }) => {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 p-6 text-white shadow-lg">
+          <section className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 p-5 text-white shadow-lg sm:p-6">
             <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <p className="mb-1 text-xs font-semibold uppercase tracking-[0.1em] text-slate-300">Current total spend</p>
-                <p className="text-4xl font-semibold tracking-tight">${totalMonthlySpend.toFixed(2)}</p>
+                <p className="text-3xl font-semibold tracking-tight sm:text-4xl">${totalMonthlySpend.toFixed(2)}</p>
                 <p className="mt-1 text-xs text-slate-300">${(totalMonthlySpend * 12).toFixed(2)}/year</p>
               </div>
               <div className="text-left sm:text-right">
@@ -264,7 +264,7 @@ export const AuditFormPage: React.FC<AuditFormPageProps> = ({ onSubmit }) => {
             disabled={isSubmitting}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="w-full rounded-2xl bg-slate-900 py-4 text-base font-semibold text-white shadow-lg transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full min-h-12 rounded-2xl bg-slate-900 py-4 text-base font-semibold text-white shadow-lg transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="inline-flex items-center gap-2">
               {isSubmitting ? 'Running Audit...' : 'Get My Audit Results'}

@@ -76,18 +76,25 @@ export interface AuditMetrics {
 // RECOMMENDATION SYSTEM
 // ==================================================
 
-export type RecommendationType = 
-  | 'downgrade-plan' 
-  | 'api-vs-subscription' 
-  | 'consolidate-users' 
-  | 'better-alternative' 
-  | 'unused-seats' 
-  | 'credit-optimization';
+export type RecommendationType =
+  | 'ENTERPRISE_DOWNGRADE'
+  | 'UNUSED_SEATS'
+  | 'API_VS_SUBSCRIPTION'
+  | 'CHEAPER_ALTERNATIVE'
+  | 'TEAM_PLAN_OPTIMIZATION'
+  | 'DUPLICATE_TOOL_OVERLAP'
+  | 'OVERPROVISIONED_SEATS'
+  | 'UNDERUTILIZED_ENTERPRISE_FEATURES';
+
+export type ConfidenceLevel = 'HIGH' | 'MEDIUM' | 'LOW';
+
+export type ImplementationDifficulty = 'EASY' | 'MODERATE' | 'COMPLEX';
 
 export interface Recommendation {
   id: string;
   tool: AITool;
   type: RecommendationType;
+  relatedTools?: AITool[];
   title: string;
   problem: string;
   suggestion: string;
@@ -95,8 +102,8 @@ export interface Recommendation {
   currentSetup: string;
   estimatedMonthlySavings: number;
   estimatedAnnualSavings: number;
-  confidence: 'high' | 'medium' | 'low';
-  implementationDifficulty: 'easy' | 'medium' | 'hard';
+  confidence: ConfidenceLevel;
+  implementationDifficulty: ImplementationDifficulty;
 }
 
 export interface AuditResult {
@@ -108,6 +115,8 @@ export interface AuditResult {
   publicSlug: string;
   isHighSavings: boolean;
   isLowSpend: boolean;
+  isValid: boolean;
+  validationErrors?: Record<string, string>;
 }
 
 // ==================================================

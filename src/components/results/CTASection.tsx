@@ -22,7 +22,7 @@ export const CTASection: React.FC<CTASectionProps> = ({
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.99 }}
           onClick={onOpenLead}
-          className="group w-full rounded-2xl bg-slate-900 px-6 py-4 text-left text-white shadow-lg transition hover:bg-slate-800"
+          className="group w-full rounded-2xl bg-slate-900 px-5 py-4 text-left text-white shadow-lg transition hover:bg-slate-800 sm:px-6"
         >
           <span className="block text-xs font-semibold uppercase tracking-[0.12em] text-slate-300">
             Founder support
@@ -50,7 +50,7 @@ export const CTASection: React.FC<CTASectionProps> = ({
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.99 }}
         onClick={onShare}
-        className="w-full rounded-2xl border border-slate-300 bg-white px-6 py-4 font-semibold text-slate-900 shadow-sm transition hover:border-slate-400 hover:shadow"
+        className="w-full rounded-2xl border border-slate-300 bg-white px-5 py-4 font-semibold text-slate-900 shadow-sm transition hover:border-slate-400 hover:shadow sm:px-6"
       >
         <span className="inline-flex items-center gap-2">
           <Share2 size={17} />

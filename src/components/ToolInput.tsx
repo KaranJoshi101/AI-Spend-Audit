@@ -9,7 +9,7 @@
  * - Remove button
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Trash2 } from 'lucide-react';
 import { PRICING_DATA } from '@/lib/pricing';
 import type { AITool, ToolUsageInput, PricingPlan } from '@/types';
@@ -37,10 +37,6 @@ export const ToolInput: React.FC<ToolInputProps> = ({ tool, onUpdate, onRemove }
 
   const availablePlans: PricingPlan[] = pricing?.tiers.map((t) => t.plan) || [];
   const [monthlySpendInput, setMonthlySpendInput] = useState(tool.monthlySpend > 0 ? String(tool.monthlySpend) : '');
-
-  useEffect(() => {
-    setMonthlySpendInput(tool.monthlySpend > 0 ? String(tool.monthlySpend) : '');
-  }, [tool.monthlySpend]);
 
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md md:p-5">

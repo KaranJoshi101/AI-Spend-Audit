@@ -6,6 +6,16 @@ TokenGuard helps founders and engineering leaders identify AI tool overspending 
 
 ---
 
+## Screenshots
+
+![TokenGuard landing page](./src/assets/hero.png)
+
+## Demo / Deployment
+
+- Local production preview: [http://127.0.0.1:4173/](http://127.0.0.1:4173/)
+- Production build command: `npm run build`
+- Preview command: `npm run preview`
+
 ## What It Solves
 
 - Enterprise plans used by teams too small to justify them
@@ -46,7 +56,7 @@ Note: the audit form starts at $0.00 spend and you fill in all pricing manually.
 
 ### Phase 1: Foundation ✅
 - Domain models, pricing constants, deterministic audit engine
-- 16 unit tests passing for core financial logic
+- 19 unit tests passing for core financial logic
 
 ### Phase 2: Form and Results Core ✅
 - Stateful audit form with validation and persistence
@@ -84,7 +94,7 @@ npm install
 # Start dev server
 npm run dev
 
-# Open browser to http://localhost:5173
+# Open the local URL printed by Vite
 ```
 
 ### Testing
@@ -94,10 +104,10 @@ npm run dev
 npm test
 
 # UI mode
-npm test:ui
+npm run test:ui
 
 # Coverage
-npm test:coverage
+npm run test:coverage
 ```
 
 ### Code Quality
@@ -142,6 +152,14 @@ TokenGuard is built to feel like a real launch-ready SaaS product:
 - Deterministic recommendation logic (not opaque LLM pricing math)
 - Production-grade TypeScript and test coverage for core engine
 - Premium UX with responsive, conversion-aware layouts
+
+## Key Decisions
+
+- Keep pricing and savings math deterministic so the report is defensible.
+- Separate current spend from estimated savings to avoid misleading labels.
+- Persist form state locally so refreshes do not lose audit progress.
+- Treat public report persistence, AI summaries, and transactional email as best-effort integrations with graceful fallback behavior.
+- Optimize for founder trust: clear copy, explicit reasoning, and a shareable report path.
 
 ---
 

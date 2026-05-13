@@ -60,15 +60,15 @@ export const LeadCaptureModal: React.FC<Props> = ({ open, onClose, report }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
       <button className="absolute inset-0 bg-slate-950/55" onClick={onClose} aria-label="Close dialog" />
-      <div className="relative w-full max-w-xl rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl md:p-7">
-        <button className="absolute right-4 top-4 rounded-lg p-1 text-slate-500 hover:bg-slate-100" onClick={onClose} aria-label="Close">
+      <div className="relative w-full max-w-xl rounded-t-3xl border border-slate-200 bg-white p-5 shadow-2xl sm:rounded-2xl sm:p-6 md:p-7">
+        <button className="absolute right-3 top-3 rounded-lg p-2 text-slate-500 hover:bg-slate-100 sm:right-4 sm:top-4" onClick={onClose} aria-label="Close">
           <X />
         </button>
         <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-500">Founder support</p>
-        <h3 className="mb-2 mt-2 text-xl font-semibold text-slate-900">Book AI Spend Optimization Consultation</h3>
-        <p className="mb-4 text-sm text-slate-600">Share your work email and we will send a focused action plan for your highest-impact recommendations.</p>
+        <h3 className="mb-2 mt-2 text-lg font-semibold text-slate-900 sm:text-xl">Book AI Spend Optimization Consultation</h3>
+        <p className="mb-4 text-sm leading-6 text-slate-600">Share your work email and we will send a focused action plan for your highest-impact recommendations.</p>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           {/* Required email field */}
@@ -80,6 +80,7 @@ export const LeadCaptureModal: React.FC<Props> = ({ open, onClose, report }) => 
             type="email"
             required
             aria-label="Work email"
+            autoComplete="email"
           />
 
           {/* Optional company field */}
@@ -89,6 +90,7 @@ export const LeadCaptureModal: React.FC<Props> = ({ open, onClose, report }) => 
             value={company}
             onChange={(e) => setCompany(e.target.value)}
             aria-label="Company"
+            autoComplete="organization"
           />
 
           {/* Optional role field */}
@@ -98,6 +100,7 @@ export const LeadCaptureModal: React.FC<Props> = ({ open, onClose, report }) => 
             value={role}
             onChange={(e) => setRole(e.target.value)}
             aria-label="Role"
+            autoComplete="organization-title"
           />
 
           {/* Optional team size field */}
@@ -110,6 +113,7 @@ export const LeadCaptureModal: React.FC<Props> = ({ open, onClose, report }) => 
             min="1"
             max="10000"
             aria-label="Team size"
+            inputMode="numeric"
           />
 
           {/* Honeypot field: hidden from real users, catches bots */}
@@ -125,15 +129,15 @@ export const LeadCaptureModal: React.FC<Props> = ({ open, onClose, report }) => 
 
           {error && <div className="text-sm text-rose-600">{error}</div>}
 
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row">
             <button
               type="submit"
               disabled={sending}
-              className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-50"
+              className="min-h-12 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-50"
             >
               {sending ? 'Sending…' : 'Request Consultation'}
             </button>
-            <button type="button" onClick={onClose} className="rounded-xl border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+            <button type="button" onClick={onClose} className="min-h-12 rounded-xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
               Cancel
             </button>
           </div>

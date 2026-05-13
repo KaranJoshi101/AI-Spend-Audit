@@ -16,19 +16,19 @@ export const RecommendationCard: React.FC<RecommendationCardProps> = ({ recommen
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-lg md:p-6"
+      className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:border-slate-300 hover:shadow-lg sm:p-5 md:p-6"
     >
-      <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between sm:gap-4">
         <div className="flex min-w-0 items-start gap-3">
           <div className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-xl bg-slate-900 text-xs font-semibold text-white">
             {rank}
           </div>
           <div>
-            <h3 className="text-lg font-semibold leading-tight text-slate-900">{recommendation.title}</h3>
+            <h3 className="text-base font-semibold leading-tight text-slate-900 sm:text-lg">{recommendation.title}</h3>
             <p className="mt-1 text-sm text-slate-600">{recommendation.problem}</p>
           </div>
         </div>
-        <div className="rounded-xl bg-emerald-50 px-4 py-2 text-right ring-1 ring-emerald-100">
+        <div className="rounded-xl bg-emerald-50 px-4 py-3 text-right ring-1 ring-emerald-100 sm:py-2">
           <p className="text-xs font-medium uppercase tracking-[0.08em] text-emerald-700">Estimated savings</p>
           <p className="text-xl font-semibold text-emerald-700">${recommendation.estimatedMonthlySavings.toFixed(0)}/mo</p>
           <p className="text-xs text-emerald-700/80">${recommendation.estimatedAnnualSavings.toFixed(0)}/yr</p>

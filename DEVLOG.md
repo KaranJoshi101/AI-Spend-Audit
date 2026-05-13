@@ -51,7 +51,7 @@
 
 **Date**: May 6, 2026  
 **Status**: Production-ready foundation  
-**Tests**: 16/16 passing | Lint: 0 errors | Build: ✅ successful
+**Tests**: 15/15 passing | Lint: 0 errors | Build: ✅ successful
 
 ---
 
@@ -98,7 +98,7 @@ Built deterministic financial calculation engine:
 - Flags high-savings vs low-spend cases
 
 ### 5. Comprehensive Test Suite
-16 tests covering:
+15 tests covering:
 - Enterprise downgrade scenarios
 - Savings calculation accuracy
 - Low-spend detection
@@ -157,7 +157,7 @@ Built deterministic financial calculation engine:
 - 1,180 lines of production code (types + logic + tests)
 - 0 lint errors
 - 0 TypeScript errors
-- 16/16 tests passing
+- 15/15 tests passing
 - 100% of recommendation logic covered
 
 **Build Performance**
@@ -254,7 +254,7 @@ npm run preview
 ```
 credex/
 ├── 390 npm packages installed
-├── 16/16 tests passing
+├── 15/15 tests passing
 ├── 0 lint violations
 ├── 0 TypeScript errors
 ├── Production build: ✅

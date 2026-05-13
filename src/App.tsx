@@ -5,6 +5,7 @@ import { ResultsPage } from '@/pages/ResultsPage';
 import { LandingPage } from '@/pages/LandingPage';
 import { PublicReportPage } from '@/pages/PublicReportPage';
 import { performAudit } from '@/engine/audit';
+import { validateAuditForm } from '@/lib/validation';
 import { useFormStore } from '@/store/formStore';
 import type { AuditResult, AuditInput } from '@/types';
 import './App.css';
@@ -37,6 +38,14 @@ function App(): React.ReactElement {
   }, []);
 
   const handleAuditSubmit = async (auditInput: AuditInput): Promise<void> => {
+    const validation = validateAuditForm(auditInput);
+    if (!validation.success) {
+      const message = Object.entries(validation.errors ?? {})
+        .map(([field, error]) => `${field}: ${error}`)
+        .join('; ');
+      throw new Error(message || 'Invalid audit data');
+    }
+
     // Simulate slight delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 500));
 

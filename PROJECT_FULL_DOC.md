@@ -47,7 +47,8 @@ This document captures the full, minute-level state of the TokenGuard project (A
 - `src/components/results/DifficultyBadge.tsx` — Implementation difficulty chip (easy/moderate/complex).
 - `src/components/results/CTASection.tsx` — Results CTA surface for share and consultation states.
 - `src/index.css`, `src/App.css` — Tailwind and small global styles; some custom utilities (.gradient-text, .glass-effect).
-- `src/__tests__/audit.test.ts` — 16 comprehensive tests verifying audit engine behavior.
+- `src/__tests__/audit.test.ts` — Integration-style audit coverage for the validated engine facade.
+- `src/engine/tests/recommendationEngine.test.ts` — Engine-level tests for validation normalization and recommendation selection.
 - `db/migrations/001_create_public_reports.sql` — SQL migration to create `public_reports` table for Supabase.
 - `README_PHASE3.md`, `PROJECT_FULL_DOC.md` — Project docs and Phase 3 notes.
 
@@ -133,7 +134,7 @@ Behavior: If optional env vars are missing, the app falls back to safe local beh
 
 ## Tests & CI
 
-- Unit tests: `src/__tests__/audit.test.ts` — 16 tests covering enterprise downgrade, savings calculations, low spend detection, recommendation generation, and edge cases.
+- Unit tests: `src/__tests__/audit.test.ts` and `src/engine/tests/recommendationEngine.test.ts` — 15 tests covering enterprise downgrade, savings calculations, low spend detection, recommendation generation, validation normalization, and edge cases.
 - Run tests:
 
 ```bash
@@ -178,7 +179,7 @@ npm run preview # optional to preview production build
 ## Phase History (concise changelog)
 
 - Phase 1: Foundation
-  - React 19 + Vite SPA, TypeScript strict mode, domain types, pricing rules, audit engine, 16 tests. Files: `src/types`, `src/lib/pricing.ts`, `src/engine/audit.ts`, tests.
+  - React 19 + Vite SPA, TypeScript strict mode, domain types, pricing rules, audit engine, 15 tests. Files: `src/types`, `src/lib/pricing.ts`, `src/engine/audit.ts`, `src/engine/recommendationEngine.ts`, tests.
 
 - Phase 2: Form & Results UI
   - `src/store/formStore.ts` (Zustand persist), `src/lib/validation.ts` (Zod), `ToolInput` component, `AuditFormPage`, `ResultsPage`, routing in `App.tsx`, Tailwind styles. Type-check & lint both passed.
